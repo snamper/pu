@@ -1,0 +1,5 @@
+{
+    "require": {
+        "justmd5/pinduoduo-sdk": "^1.2"
+    }
+}
