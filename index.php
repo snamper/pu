@@ -199,7 +199,10 @@ if (defined('ENVIRONMENT'))
  * And away we go...
  *
  */
+//加载自动加载文件
+require_once './vendor/autoload.php';
 require_once BASEPATH.'core/CodeIgniter.php';
+
 
 /* End of file index.php */
 /* Location: ./index.php */
