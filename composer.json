@@ -1,6 +1,18 @@
 {
-
     "require": {
-        "justmd5/duoduoke-sdk": "^2.1"
+        "php": "^5.5|^7.0",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://mirrors.aliyun.com/composer/"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Com\\Pdd\\Pop\\Sdk\\": "vendor/pdd/src/"
+        }
     }
 }
