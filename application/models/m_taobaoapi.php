@@ -1,18 +1,26 @@
 <?php
 
+/**
+ * 拼多多API接口
+ * Class M_pddapi
+ */
+
 class M_taobaoapi extends CI_Model{
+
+    private $pdd_config;
 
 	function __construct()
 	{
 		parent::__construct();
 		$this->config->load('site_info');
-
-        define('APPKEY',    $this->config->item('appkey'));
-        define('SECRETKEY',    $this->config->item('secretkey'));
+        //拼多多的配置
+        $this -> pdd_config = [
+            'key'           => $this->config->item('pdd_client_id'),
+            'secret'        => $this->config->item('pdd_client_secret'),
+            'debug'         => true,
+        ];
 
         define('PU_HTTP_PROXY',    $this->config->item('http_proxy'));
-
-        include "taobaoapi/TopSdk.php";
 	}
 
 
@@ -24,28 +32,37 @@ class M_taobaoapi extends CI_Model{
      * @return String $resp XML字符串
      */
     function searchItem($keyword, $cid){
+        //实例化相关的数据
+        $client = new \Com\Pdd\Pop\Sdk\PopHttpClient($this -> pdd_config['key'], $this -> pdd_config['secret']);
+        //设置相关的参数
+        $request = new \Com\Pdd\Pop\Sdk\Api\Request\PddDdkGoodsSearchRequest();
 
-    	//实例化TopClient类
-    	$c = new TopClient;
-    	$c->appkey = APPKEY;
-    	$c->secretKey = SECRETKEY;
+        //设置相关的关键字
+        $request->setKeyword($keyword);
+        $request->setIsBrandGoods(true);
+        $request->setWithCoupon(true);
+        //商品ID列表
+        $request->setActivityTags(array(7,21));
+        $request->setPage(1);
+        $request->setPageSize(10);
+        $request->setSortType(0);
 
-    	$req = new TaobaokeItemsGetRequest;
-    	$req->setFields("num_iid,title,click_url,pic_url,price,commission,commission_num,volume,nick");
+        try{
+            $response = $client->syncInvoke($request);
+        } catch(Com\Pdd\Pop\Sdk\PopHttpException $e){
+            echo $e->getMessage();
+            exit;
+        }
+        $content = $response->getContent();
 
-    	$req->setCid($cid);
-    	$req->setKeyword($keyword);
-    //	$req->setSort("commissionVolume_desc");
-    	$req->setSort("credit_desc");
-    	$req->setGuarantee("true");
-    	$req->setStartCommissionRate("500");
-    	$req->setEndCommissionRate("5000");
-    	$req->setMallItem("true");
-    	$req->setPageNo(1);
-    	$req->setPageSize(80);
-    	$req->setOuterCode("abc");
+        //设置相关的参数
+        $param = [
+            'keyword' => $keyword,
+            'cat_id' => $cid,
+        ];
+        //进行数据的请求
+        $resp = $pinduoduo -> request('pdd.ddk.goods.detail', $param);
     	//执行API请求并打印结果
-    	$resp = $c->execute($req);
     	return $resp;
     }
 
@@ -74,19 +91,27 @@ class M_taobaoapi extends CI_Model{
         }
     }
 
-    function getCats($parentid){
-        $c = new TopClient;
-        $c->appkey = APPKEY;
-        $c->secretKey = SECRETKEY;
+    function getCats($parentid)
+    {
+        $client = new \Com\Pdd\Pop\Sdk\PopHttpClient($this -> pdd_config['key'], $this -> pdd_config['secret']);
+        //设置相关的参数
+        $request = new \Com\Pdd\Pop\Sdk\Api\Request\PddGoodsOptGetRequest();
 
-        $req = new ItemcatsGetRequest;
-        $req->setFields("cid,parent_cid,name,is_parent");
+        $request->setParentOptId(1);
+
+        $response = $client->syncInvoke($request);
+        $content = $response->getContent();
+
+        var_dump($content);
+        exit();
+        /*$req = new ItemcatsGetRequest;
+        $req->setFields("cid,parent_cid,name,is_parent");*/
         //50011740 男鞋
         //16 女装/女士精品
         //50006842 箱包皮具/热销女包/男包
         //50012029 运动鞋new
         //30 男装
-        $req->setParentCid($parentid);
-        return $c->execute($req);
+        /*$req->setParentCid($parentid);
+        return $c->execute($req);*/
     }
 }
