@@ -40,7 +40,7 @@ class M_taobaoapi extends CI_Model{
         //设置相关的关键字
         $request->setKeyword($keyword);
         $request->setIsBrandGoods(true);
-        $request->setWithCoupon(true);
+        //$request->setWithCoupon(true);
         //商品ID列表
         $request->setActivityTags(array(7,21));
         $request->setPage(1);
@@ -53,17 +53,13 @@ class M_taobaoapi extends CI_Model{
             echo $e->getMessage();
             exit;
         }
-        $content = $response->getContent();
 
-        //设置相关的参数
-        $param = [
-            'keyword' => $keyword,
-            'cat_id' => $cid,
-        ];
-        //进行数据的请求
-        $resp = $pinduoduo -> request('pdd.ddk.goods.detail', $param);
+        $resp = $response->getContent();
+        if (empty($resp['goods_search_response']['goods_list'])) {
+            return $resp['goods_search_response']['total_count'] = 0;
+        }
     	//执行API请求并打印结果
-    	return $resp;
+    	return $resp['goods_search_response'];
     }
 
     /**
