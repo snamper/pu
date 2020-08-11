@@ -271,7 +271,45 @@ class Admin extends CI_Controller {
 	 *
 	 */
 	public function setitem(){
-		echo $this->M_item->set_item();
+	    //生成相关的优惠连接
+        //pdd.ddk.goods.promotion.url.generate
+        $this -> config ->load('site_info');
+        $pdd_config = $this -> config -> config;
+        $client = new \Com\Pdd\Pop\Sdk\PopHttpClient($pdd_config['pdd_client_id'], $pdd_config['pdd_client_secret']);
+        $request = new \Com\Pdd\Pop\Sdk\Api\Request\PddDdkGoodsPromotionUrlGenerateRequest();
+
+        //进行参数设置
+        $request->setGenerateQqApp(true);
+        $request->setGenerateSchemaUrl(true);
+        $request->setGenerateShortUrl(true);
+        $request->setGenerateWeappWebview(true);
+        $request->setGenerateWeApp(true);
+        $request->setGoodsIdList(array($_POST['num_iid']));
+        $request->setMultiGroup(false);
+        $request->setSearchId($_POST['search_id']);
+        $request->setPId('10305158_138786657');
+
+        //拿取相关的数据
+        try{
+            $response = $client->syncInvoke($request);
+        } catch(Com\Pdd\Pop\Sdk\PopHttpException $e){
+            echo $e->getMessage();
+            exit;
+        }
+        $content = $response->getContent();
+	    //数据进行转换
+        $data = array(
+            'title'      => $_POST['title'],
+            'img_url'    => $_POST['img_url'],
+            'cid'        => $_POST['cid'],
+            'price'      => $_POST['price'],
+            'group_price'=> $_POST['group_price'],
+            'sellernick' => $_POST['sellernick'],
+            'num_iid'    => $_POST['num_iid'],
+            'click_url'  => '',
+        );
+        $data ['promotion_info'] = json_encode($content);
+		echo $this->M_item->set_item($data);
 	}
 
 
