@@ -97,17 +97,9 @@ class M_taobaoapi extends CI_Model{
 
         $response = $client->syncInvoke($request);
         $content = $response->getContent();
-
-        var_dump($content);
-        exit();
-        /*$req = new ItemcatsGetRequest;
-        $req->setFields("cid,parent_cid,name,is_parent");*/
-        //50011740 男鞋
-        //16 女装/女士精品
-        //50006842 箱包皮具/热销女包/男包
-        //50012029 运动鞋new
-        //30 男装
-        /*$req->setParentCid($parentid);
-        return $c->execute($req);*/
+        if (empty($content['goods_opt_get_response']['goods_opt_list'])) {
+            return [];
+        }
+        return $content['goods_opt_get_response'];
     }
 }
