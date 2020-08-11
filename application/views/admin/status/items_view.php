@@ -30,7 +30,7 @@
         <td><img src="<?php echo $array->img_url ?>" class="thumbnail" alt="" title=""></td>
         <td><?php echo $array->click_count;?></td>
         <td><?php echo $array->sellernick ?></td>
-        <td><strong><?php echo $array->price ?></strong></td>
+        <td><strong><?php echo $array->price / 100 ?></strong></td>
         <td><?php echo site_url('home/redirect').'/'.$array->id ?></td>
         <td><a href="##" title="删除此条" class="btn_delete" data-itemid="<?php echo $array->id; ?>">删除</a></td>
       </tr>
