@@ -14,16 +14,7 @@ class M_item extends CI_Model{
 
 
 	//通过POST传递过来的参数，可以存入到数据库中，然后返回一个“添加成功！”
-	function set_item(){
-		$data = array(
-               'title' => $_POST['title'],
-               'img_url' => $_POST['img_url'],
-               'cid' => $_POST['cid'],
-               'click_url' =>  $_POST['click_url'],
-               'price' => $_POST['price'],
-               'sellernick' => $_POST['sellernick'],
-               'num_iid' => $_POST['num_iid']
-            );
+	function set_item($data){
 		return $this->db->insert('item', $data);
 	}
 
