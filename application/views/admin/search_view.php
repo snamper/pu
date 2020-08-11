@@ -29,18 +29,19 @@
 		foreach($resp['goods_list'] as $taobaoke_item){
 		?>
 			<li>
-				<a href='<?php ?>' data-num_id='<?php echo $taobaoke_item['goods_id'] ?>'
-				title='<?php echo htmlspecialchars(strip_tags($taobaoke_item['goods_name']),ENT_QUOTES); ?>' data-price='<?php echo $taobaoke_item['goods_image_url']?>'
+				<a href='#' data-num_id='<?php echo $taobaoke_item['goods_id'] ?>' data-search_id='<?php echo $taobaoke_item['search_id'] ?>'
+				title='<?php echo htmlspecialchars(strip_tags($taobaoke_item['goods_name']),ENT_QUOTES); ?>' data-price='<?php echo $taobaoke_item['min_normal_price']?>' data-group_price='<?php echo $taobaoke_item['min_group_price']?>'
 				data-sellernick='<?php echo htmlspecialchars($taobaoke_item['mall_name'],ENT_QUOTES); ?>'>
-				<img src="<?php echo $taobaoke_item['goods_thumbnail_url']?>" alt="<?php echo htmlspecialchars(strip_tags($taobaoke_item['goods_name']),ENT_QUOTES)?>"/>
+				<img src="<?php echo $taobaoke_item['goods_thumbnail_url'] ?>" alt="<?php echo htmlspecialchars(strip_tags($taobaoke_item['goods_name']),ENT_QUOTES)?>"/>
 				</a>
 				<p>
                     <span class="right"><?php echo $taobaoke_item['sales_tip'] ?>已售</span>
                 </P>
                 <P>
-                    <span>佣金比例：<?php echo $taobaoke_item['promotion_rate'] ?></span>
-                    <span>最小拼团价：<?php echo $taobaoke_item['min_group_price']?></span>
-                    <span>最小单买价格：<?php echo $taobaoke_item['min_normal_price']?></span>
+                    <span>预估佣金：<?php echo round($taobaoke_item['promotion_rate'] / 1000 * $taobaoke_item['min_group_price'] / 100, 2); ?> 元</span>
+                </p>
+                <p>
+                    <span>拼团价/单买价：<?php echo $taobaoke_item['min_group_price'] / 100 ?> 元 / <?php echo $taobaoke_item['min_normal_price'] / 100?> 元</span>
                 </p>
 			</li>
 		<?php
@@ -66,17 +67,19 @@
 				item.sellernick = thisItem.data('sellernick');
 				item.title = htmlEncode(thisItem.attr('title'));
 				item.price = thisItem.data('price');
-				item.click_url = thisItem.attr('href');
+				item.group_price = thisItem.data('group_price');
 				item.cid = $('#cat_select').val();
 				item.num_iid = thisItem.data('num_id');
+				item.search_id = thisItem.data('search_id');
 
 				$.post('<?php echo site_url("admin/setitem/")?>',
 						   { img_url: item.img_url,
 							title: item.title,
 							cid: item.cid,
 							sellernick: item.sellernick,
-							click_url: item.click_url,
+                            search_id: item.search_id,
 							price: item.price,
+                            group_price: item.group_price,
 							num_iid: item.num_iid
 						   },
 						   function(data) {
