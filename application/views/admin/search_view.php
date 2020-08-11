@@ -23,18 +23,25 @@
 <!-- 搜索结果列表 -->
 <ul id='search-list'>
 <?php
-	if($resp->total_results == 0){
+	if(empty($resp['total_count'])){
 		echo '没有找到条目，请修改关键词或者类别。';
 	} else{
-		foreach($resp->taobaoke_items->taobaoke_item as $taobaoke_item){
+		foreach($resp['goods_list'] as $taobaoke_item){
 		?>
 			<li>
-				<a href='<?php echo $taobaoke_item->click_url ?>' data-num_id='<?php echo $taobaoke_item->num_iid ?>' 
-				title='<?php echo htmlspecialchars(strip_tags($taobaoke_item->title),ENT_QUOTES); ?>' data-price='<?php echo $taobaoke_item->price?>' 
-				data-sellernick='<?php echo htmlspecialchars($taobaoke_item->nick,ENT_QUOTES); ?>'>
-				<img src="<?php echo $taobaoke_item->pic_url?>" alt="<?php echo htmlspecialchars(strip_tags($taobaoke_item->title),ENT_QUOTES)?>"/>
+				<a href='<?php ?>' data-num_id='<?php echo $taobaoke_item['goods_id'] ?>'
+				title='<?php echo htmlspecialchars(strip_tags($taobaoke_item['goods_name']),ENT_QUOTES); ?>' data-price='<?php echo $taobaoke_item['goods_image_url']?>'
+				data-sellernick='<?php echo htmlspecialchars($taobaoke_item['mall_name'],ENT_QUOTES); ?>'>
+				<img src="<?php echo $taobaoke_item['goods_thumbnail_url']?>" alt="<?php echo htmlspecialchars(strip_tags($taobaoke_item['goods_name']),ENT_QUOTES)?>"/>
 				</a>
-				<p><span class="right"><?php echo $taobaoke_item->volume ?>件/30天</span><span><?php echo $taobaoke_item->commission ?></span> / <span><?php echo $taobaoke_item->price?></span></p>
+				<p>
+                    <span class="right"><?php echo $taobaoke_item['sales_tip'] ?>已售</span>
+                </P>
+                <P>
+                    <span>佣金比例：<?php echo $taobaoke_item['promotion_rate'] ?></span>
+                    <span>最小拼团价：<?php echo $taobaoke_item['min_group_price']?></span>
+                    <span>最小单买价格：<?php echo $taobaoke_item['min_normal_price']?></span>
+                </p>
 			</li>
 		<?php
 		}
