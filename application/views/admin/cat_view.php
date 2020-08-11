@@ -30,6 +30,9 @@
         <th>
           删除
         </th>
+          <th>
+              操作
+          </th>
       </tr>
     </thead>
     <tbody>
@@ -42,14 +45,14 @@
                 echo '<td><input type="text" class="input-small cat_slug" value="'.$row->cat_slug.'"></td>';
                 echo '<td class="cid" value="'.$row->cat_id.'">'.$row->cat_id.'</td>';
                 echo '<td><a href="'.site_url('admin/catdelete/'.$row->cat_id).'">×</a></td>';
+                echo '<td><a href="'.site_url('admin/catadd/'.$row->cat_id).'">新增</a></td>';
                 echo '</tr>';
                 $index++;
 			}
 		 ?>
     </tbody>
   </table>
-    <a href="##" title="" class="btn btn-primary" id="btn-save">保存</a>
-    <a href="<?php echo site_url('admin/catadd')?>" title="">新增类别</a>
+<!--    <a href="##" title="" class="btn btn-primary" id="btn-save">保存</a>-->
 </div>
 
 <script type='text/javascript' src='<?php echo base_url()?>assets/js/jquery.js'></script>
