@@ -83,9 +83,10 @@
 				<img src="<?php echo $array->img_url ?>" class="" alt="" title="<?php echo $array->title ?>">
 
 			</div>
-				<div class="op"><div class="desc"><?php echo $array->sellernick ?>   / <strong>RMB<?php echo $array->price ?></strong></div>
+				<div class="op"><div class="desc"><?php echo $array->sellernick ?>   / <strong>RMB<?php echo $array->price/100 ?></strong></div>
 				<div class="buttonline">
-					<a href="<?php echo site_url('home/redirect').'/'.$array->id ?>" title="去购买" class="btn btn-success" target="_blank">去购买</a>
+<!--					<a href="--><?php //echo site_url('home/detail').'/'.$array->id ?><!--" title="去购买" class="btn btn-success" target="_blank">去购买</a>-->
+					<a href="javascript:;" onclick="goods_detail('<?php echo $array->id ?>')" title="去购买" class="btn btn-success">去购买</a>
 				</div></div>
 			</div>
 		</article>
@@ -105,8 +106,25 @@
 </footer>
 
 
-<script type="text/javascript">
-PUT YOUR Baidu or Google analytics code
+<script type='text/javascript' src="<?php echo base_url()?>assets/js/jquery.js"></script>
+<script type='text/javascript' src="<?php echo base_url()?>assets/js/layer/layer.js"></script>
+
+<script>
+    //点击产品，显示出产品相信信息
+    function goods_detail(goods_id)
+    {
+        //进行二维码的请求
+        layer.open({
+            type: 2,
+            title: false,
+            area: ['284px', '284px'],
+            shade: 0.8,
+            closeBtn: 0,
+            shadeClose: true,
+            content: '<?php echo site_url("home/qrcode")?>/'+goods_id,
+        });
+    }
+
 </script>
 
 </body>
