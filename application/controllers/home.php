@@ -118,6 +118,50 @@ class Home extends CI_Controller {
 		$this->load->view('search_view',$data);
 	}
 
+	//获取二维码
+	public function qrCode($id)
+    {
+        $this->load->model('M_item');
+        //查看当前商品的详情
+        $result = $this -> M_item -> getItem($id);
+        if (empty($result)) {
+            $data['date_uri'] = null;
+            $data['good_info'] = null;
+        } else {
+            //拿取出 mobile_url 字段
+            $data['good_info'] = $result;
+            $promotion_info = json_decode($result -> promotion_info, true);
+            $mobile_url = $promotion_info['goods_promotion_url_generate_response']['goods_promotion_url_list']['0']['mobile_url'];
+
+            //进行二维码的生成
+            $qrCode = new \Endroid\QrCode\QrCode($mobile_url);
+            $qrCode->setSize(300);
+            $qrCode->setMargin(10);
+
+            // Set advanced options
+            $qrCode->setWriterByName('png');
+            $qrCode->setEncoding('UTF-8');
+            $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]);
+            $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
+            $qrCode->setValidateResult(false);
+
+            $qrCode->setRoundBlockSize(true, \Endroid\QrCode\QrCode::ROUND_BLOCK_SIZE_MODE_MARGIN); // The size of the qr code is shrinked, if necessary, but the size of the final image remains unchanged due to additional margin being added (default)
+            $qrCode->setRoundBlockSize(true, \Endroid\QrCode\QrCode::ROUND_BLOCK_SIZE_MODE_ENLARGE); // The size of the qr code and the final image is enlarged, if necessary
+            $qrCode->setRoundBlockSize(true, \Endroid\QrCode\QrCode::ROUND_BLOCK_SIZE_MODE_SHRINK); // The size of the qr code and the final image is shrinked, if necessary
+
+            $qrCode->setWriterOptions(['exclude_xml_declaration' => true]);
+            $data['date_uri'] = $qrCode->writeDataUri();
+        }
+
+        //进行页面的渲染
+        $this -> load->view('qrcode_view', $data);
+    }
+
+	//查看更多的商品
+	public function more()
+    {
+
+    }
 
 
 }
