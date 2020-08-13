@@ -13,6 +13,7 @@
 	<link rel="stylesheet" type="text/css" media="all" href="<?php echo base_url()?>assets/index.css?d=20120705" />
 	<!--[if lt IE 9]>
 	<script src="<?php echo base_url()?>assets/js/html5shiv.js"></script>
+	<script src="<?php echo base_url()?>assets/js/layer/layer.js"></script>
 	<![endif]-->
 </head>
 <body>
@@ -50,8 +51,7 @@ if($resp->num_rows() == 0){
 	//sort=coefp    人气宝贝（加上这个内容使出现的搜索结果都是人气宝贝）  
 	//q                      关键词（后面直接添加上你想要搜的关键词中文）  
 	//style=grid      大图（加上这个代码可以使搜索的结果保证以大图展示）  
-		echo '你搜索的“'.$keyword.'”没有找到本站条目。<a href="http://s8.taobao.com/search?cat=&sort=coefp&q='.
-		$keyword.'&pid=mm_'.$pid.'_0_0&style=grid ">在淘宝搜索更多'.$keyword.'。</a>';
+		echo '你搜索的“'.$keyword.'”没有找到本站条目。<a href="http://s8.taobao.com">在拼多多搜索更多'.$keyword.'。</a>';
 	}else if($resp->num_rows()>0){ ?>
 	<div class="goods-all transitions-enabled masonry">
 	<?php foreach ($resp->result() as $array):
@@ -66,15 +66,14 @@ if($resp->num_rows() == 0){
 			</div>
 				<div class="op"><div class="desc"><?php echo $array->sellernick ?>   / <strong>RMB<?php echo $array->price ?></strong></div>
 				<div class="buttonline">
-					<a href="<?php echo site_url('home/redirect').'/'.$array->id ?>" title="去购买" class="btn btn-success" target="_blank">去购买</a>
+					<a href="<?php echo site_url('home/detail').'/'.$array->id ?>" title="去购买" class="btn btn-success" target="_blank">去购买</a>
 				</div></div>
 			</div>
 		</article>
 	<?php endforeach;?>
 	</div>
     	<?php
-			echo '没有找到满意的结果？<a href="http://s8.taobao.com/search?cat=&sort=coefp&q='.
-		$keyword.'&pid=mm_'.$pid.'_0_0&style=grid ">在淘宝搜索更多'.$keyword.'。</a>';
+			echo '没有找到满意的结果？<a href="http://s8.taobao.com">在拼多多搜索更多'.$keyword.'。</a>';
     	 } ?>
 </div>
 
