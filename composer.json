@@ -2,7 +2,8 @@
     "require": {
         "php": "^5.5|^7.0",
         "ext-curl": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "endroid/qr-code": "^3.9"
     },
     "repositories": {
         "packagist": {
