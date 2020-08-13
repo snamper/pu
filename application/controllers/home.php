@@ -158,9 +158,23 @@ class Home extends CI_Controller {
     }
 
 	//查看更多的商品
+    //TODO 未完成 后期再进行补写
 	public function more()
     {
+        $this->load->model('M_taobaoapi');
+        $data['cat'] = $this->M_cat->get_all_cat();
 
+        //获取搜索关键词
+        $keyword = trim($this->input->get('keyword', TRUE),"'\"");
+
+        /* cid是类别id */
+        $cid = '0';
+
+        $data['resp'] = $this->M_taobaoapi->searchItem($keyword, $cid);
+        $data['keyword'] =  $keyword;
+
+        $this->load->view('admin/include_header');
+        $this->load->view('admin/search_view',$data);
     }
 
 
